@@ -6,8 +6,8 @@ public class Epic extends Task {
 
     private ArrayList<Subtask> subtasks;
 
-    public Epic(int id, String name, String description) {
-        super(id, name, description);
+    public Epic(String name, String description) {
+        super(name, description, TaskStatus.NEW);
         this.subtasks = new ArrayList<>();
     }
 
@@ -17,6 +17,19 @@ public class Epic extends Task {
 
     public ArrayList<Subtask> getSubtasks() {
         return subtasks;
+    }
+
+    public void updateStatus() {
+        var isAllNew = true;
+        var isAllDone = true;
+        for (Subtask subtask : subtasks) {
+            if (!(subtask.getTaskStatus() == TaskStatus.NEW)) isAllNew = false;
+            else if (!(subtask.getTaskStatus() == TaskStatus.DONE)) isAllDone = false;
+        }
+
+        if (isAllNew) setTaskStatus(TaskStatus.NEW);
+        else if (isAllDone) setTaskStatus(TaskStatus.DONE);
+        else setTaskStatus(TaskStatus.IN_PROGRESS);
     }
 
 
