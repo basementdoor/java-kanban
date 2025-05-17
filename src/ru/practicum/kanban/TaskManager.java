@@ -41,7 +41,7 @@ public class TaskManager {
         } else {
             epic.setId(generateId());
             epics.put(epic.getId(), epic);
-            System.out.println("Эпик %s успешно создана".formatted(epic));
+            System.out.println("Эпик %s успешно создан".formatted(epic));
         }
     }
 
@@ -57,6 +57,8 @@ public class TaskManager {
     public void updateSubtask(Subtask subtask) {
         if (!subtasks.containsKey(subtask.getId())) {
             System.out.println("Подзадача с ID %s не найдена".formatted(subtask.getId()));
+        } else if (!epics.containsKey(subtask.getEpicId())) {
+            System.out.println("Эпик с ID %s не найден".formatted(subtask.getEpicId()));
         } else {
             subtasks.put(subtask.getId(), subtask);
             var epic = epics.get(subtask.getEpicId());
@@ -89,31 +91,35 @@ public class TaskManager {
     }
 
     public void getTasks() {
+        System.out.println("Список задач:");
         for (Task task : tasks.values()) {
             System.out.println(task);
         }
     }
 
     public void getSubtasks() {
+        System.out.println("Список подзадач:");
         for (Task task : subtasks.values()) {
             System.out.println(task);
         }
     }
 
     public void getEpics() {
+        System.out.println("Список эпиков:");
         for (Task epic : epics.values()) {
             System.out.println(epic);
         }
     }
 
-    public void deleteTask(int Id) {
+    public void deleteTaskById(int Id) {
         if (!tasks.containsKey(Id)) {
             System.out.println("Не найдена задача с ID " + Id);
         }
         tasks.remove(Id);
+        System.out.println("Задача с ID %s успешно удалена".formatted(Id));
     }
 
-    public void deleteSubtask(int Id) {
+    public void deleteSubtaskById(int Id) {
         if (!subtasks.containsKey(Id)) {
             System.out.println("Не найдена подзадача с ID " + Id);
         } else {
@@ -127,7 +133,7 @@ public class TaskManager {
 
     }
 
-    public void deleteEpic(int Id) {
+    public void deleteEpicById(int Id) {
         if (!epics.containsKey(Id)) {
             System.out.println("Не найден эпик с ID " + Id);
         } else {
