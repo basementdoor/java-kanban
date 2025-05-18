@@ -1,4 +1,6 @@
-package ru.practicum.kanban;
+package model;
+
+import util.TaskStatus;
 
 import java.util.Objects;
 

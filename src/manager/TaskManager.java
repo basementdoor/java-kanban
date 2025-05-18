@@ -1,4 +1,9 @@
-package ru.practicum.kanban;
+package manager;
+
+import model.Epic;
+import model.Subtask;
+import model.Task;
+import util.TaskStatus;
 
 import java.util.HashMap;
 
@@ -29,8 +34,8 @@ public class TaskManager {
             subtask.setId(generateId());
             subtasks.put(subtask.getId(), subtask);
             var epic = epics.get(subtask.getEpicId());
-            epic.addSubtask(subtask);
-            epic.updateStatus();
+            epic.addSubtask(subtask.getId());
+            updateEpicStatus(epic);
             System.out.println("Подзадача %s успешно создана".formatted(subtask));
         }
     }
@@ -62,7 +67,7 @@ public class TaskManager {
         } else {
             subtasks.put(subtask.getId(), subtask);
             var epic = epics.get(subtask.getEpicId());
-            epic.updateStatus();
+            updateEpicStatus(epic);
             System.out.println("Задача %s успешно обновлена".formatted(subtask));
         }
     }
@@ -126,8 +131,8 @@ public class TaskManager {
             var epic = epics.get(subtasks.get(Id).getEpicId());
             var subtask = subtasks.get(Id);
             subtasks.remove(Id);
-            epic.getSubtasks().remove(subtask);
-            epic.updateStatus();
+            epic.getSubtasksId().remove(subtask);
+            updateEpicStatus(epic);
             System.out.println("Подзадача с ID %s успешно удалена".formatted(Id));
         }
 
@@ -138,8 +143,8 @@ public class TaskManager {
             System.out.println("Не найден эпик с ID " + Id);
         } else {
             var epic = epics.get(Id);
-            for (Subtask subtask: epic.getSubtasks()) {
-                subtasks.remove(subtask.getId());
+            for (Integer subtaskId: epic.getSubtasksId()) {
+                subtasks.remove(subtaskId);
             }
             epics.remove(Id);
             System.out.println("Эпик с ID %s успешно удален".formatted(Id));
@@ -154,5 +159,19 @@ public class TaskManager {
 
     private int generateId() {
         return uniqueId++;
+    }
+
+    private void updateEpicStatus(Epic epic) {
+        var isAllNew = true;
+        var isAllDone = true;
+        for (Integer subtaskId : epic.getSubtasksId()) {
+            var subtask = getSubtaskById(subtaskId);
+            if (!(subtask.getTaskStatus() == TaskStatus.NEW)) isAllNew = false;
+            else if (!(subtask.getTaskStatus() == TaskStatus.DONE)) isAllDone = false;
+        }
+
+        if (isAllNew) epic.setTaskStatus(TaskStatus.NEW);
+        else if (isAllDone) epic.setTaskStatus(TaskStatus.DONE);
+        else epic.setTaskStatus(TaskStatus.IN_PROGRESS);
     }
 }
