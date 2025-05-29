@@ -1,3 +1,4 @@
+import manager.InMemoryTaskManager;
 import manager.TaskManager;
 import model.Epic;
 import model.Subtask;
@@ -10,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println("Поехали!");
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = new InMemoryTaskManager();
 
 //        Тесты
         System.out.println("1. Создание двух простых задач, эпика с одной подзадачей, и эпика с двумя подзадачами");
