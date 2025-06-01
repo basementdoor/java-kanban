@@ -1,6 +1,6 @@
 package model;
 
-import util.TaskStatus;
+import util.Status;
 
 import java.util.Objects;
 
@@ -9,19 +9,19 @@ public class Task {
     private int id;
     private String name;
     private String description;
-    private TaskStatus taskStatus;
+    private Status status;
 
-    public Task(String name, String description, TaskStatus taskStatus) {
+    public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
-        this.taskStatus = taskStatus;
+        this.status = status;
     }
 
-    public Task(int id, String name, String description, TaskStatus taskStatus) {
+    public Task(int id, String name, String description, Status status) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.taskStatus = taskStatus;
+        this.status = status;
     }
 
     public int getId() {
@@ -48,12 +48,12 @@ public class Task {
         this.description = description;
     }
 
-    public TaskStatus getTaskStatus() {
-        return taskStatus;
+    public Status getTaskStatus() {
+        return status;
     }
 
-    public void setTaskStatus(TaskStatus taskStatus) {
-        this.taskStatus = taskStatus;
+    public void setTaskStatus(Status status) {
+        this.status = status;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Task {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", taskStatus=" + taskStatus +
+                ", taskStatus=" + status +
                 '}';
     }
 }

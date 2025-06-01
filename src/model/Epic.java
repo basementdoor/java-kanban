@@ -1,6 +1,6 @@
 package model;
 
-import util.TaskStatus;
+import util.Status;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -10,16 +10,19 @@ public class Epic extends Task {
     private ArrayList<Integer> subtasksId;
 
     public Epic(String name, String description) {
-        super(name, description, TaskStatus.NEW);
+        super(name, description, Status.NEW);
         this.subtasksId = new ArrayList<>();
     }
 
     public Epic(int id, String name, String description) {
-        super(id, name, description, TaskStatus.NEW);
+        super(id, name, description, Status.NEW);
         this.subtasksId = new ArrayList<>();
     }
 
     public void addSubtask(int subtaskId) {
+        if (this.getId() == subtaskId) {
+            return;
+        }
         subtasksId.add(subtaskId);
     }
 
@@ -32,7 +35,7 @@ public class Epic extends Task {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Epic epic = (Epic) obj;
-        return Objects.equals(subtasksId, epic.subtasksId) && this.getId() == epic.getId();
+        return this.getId() == epic.getId();
     }
 
     @Override

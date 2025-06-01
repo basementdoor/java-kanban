@@ -1,6 +1,6 @@
 package model;
 
-import util.TaskStatus;
+import util.Status;
 
 import java.util.Objects;
 
@@ -8,13 +8,13 @@ public class Subtask extends Task {
 
     private final int epicId;
 
-    public Subtask(String name, String description, TaskStatus taskStatus, int epicId) {
-        super(name, description, taskStatus);
+    public Subtask(String name, String description, Status status, int epicId) {
+        super(name, description, status);
         this.epicId = epicId;
     }
 
-    public Subtask(int id, String name, String description, TaskStatus taskStatus, int epicId) {
-        super(id, name, description, taskStatus);
+    public Subtask(int id, String name, String description, Status status, int epicId) {
+        super(id, name, description, status);
         this.epicId = epicId;
     }
 
@@ -27,7 +27,7 @@ public class Subtask extends Task {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Subtask subtask = (Subtask) obj;
-        return epicId == subtask.epicId && this.getId() == subtask.getId();
+        return this.getId() == subtask.getId();
     }
 
     @Override
