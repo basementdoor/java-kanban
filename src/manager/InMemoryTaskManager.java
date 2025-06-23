@@ -126,39 +126,42 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteTaskById(int Id) {
-        if (!tasks.containsKey(Id)) {
-            System.out.println("Не найдена задача с ID " + Id);
+    public void deleteTaskById(int id) {
+        if (!tasks.containsKey(id)) {
+            System.out.println("Не найдена задача с ID " + id);
         }
-        tasks.remove(Id);
-        System.out.println("Задача с ID %s успешно удалена".formatted(Id));
+        tasks.remove(id);
+        historyManager.remove(id);
+        System.out.println("Задача с ID %s успешно удалена".formatted(id));
     }
 
     @Override
-    public void deleteSubtaskById(int Id) {
-        if (!subtasks.containsKey(Id)) {
-            System.out.println("Не найдена подзадача с ID " + Id);
+    public void deleteSubtaskById(int id) {
+        if (!subtasks.containsKey(id)) {
+            System.out.println("Не найдена подзадача с ID " + id);
         } else {
-            var epic = epics.get(subtasks.get(Id).getEpicId());
-            subtasks.remove(Id);
-            epic.getSubtasksId().remove(Integer.valueOf(Id));
+            var epic = epics.get(subtasks.get(id).getEpicId());
+            subtasks.remove(id);
+            epic.getSubtasksId().remove(Integer.valueOf(id));
             updateEpicStatus(epic);
-            System.out.println("Подзадача с ID %s успешно удалена".formatted(Id));
+            historyManager.remove(id);
+            System.out.println("Подзадача с ID %s успешно удалена".formatted(id));
         }
 
     }
 
     @Override
-    public void deleteEpicById(int Id) {
-        if (!epics.containsKey(Id)) {
-            System.out.println("Не найден эпик с ID " + Id);
+    public void deleteEpicById(int id) {
+        if (!epics.containsKey(id)) {
+            System.out.println("Не найден эпик с ID " + id);
         } else {
-            var epic = epics.get(Id);
+            var epic = epics.get(id);
             for (Integer subtaskId: epic.getSubtasksId()) {
                 subtasks.remove(subtaskId);
             }
-            epics.remove(Id);
-            System.out.println("Эпик с ID %s успешно удален".formatted(Id));
+            epics.remove(id);
+            historyManager.remove(id);
+            System.out.println("Эпик с ID %s успешно удален".formatted(id));
         }
     }
 
