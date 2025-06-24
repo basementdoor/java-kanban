@@ -3,6 +3,7 @@ package manager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
+import util.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,8 +11,7 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final ArrayList<Task> history = new ArrayList<>();
-    final Map<Integer, Node> nodes = new HashMap<>();
+    private final Map<Integer, Node> nodes = new HashMap<>();
     private Node first;
     private Node last;
 
@@ -41,16 +41,18 @@ public class InMemoryHistoryManager implements HistoryManager {
             return;
         }
 
-        if (node.prev != null) {
-            node.prev.next = node.next;
+        if (node.getPrev() != null) {
+            var prevNode = node.getPrev();
+            prevNode.setNext(node.getNext());
         } else {
-            first = node.next;
+            first = node.getNext();
         }
 
-        if (node.next != null) {
-            node.next.prev = node.prev;
+        if (node.getNext() != null) {
+            var nextNode = node.getNext();
+            nextNode.setPrev(node.getPrev());
         } else {
-            last = node.prev;
+            last = node.getPrev();
         }
     }
 
@@ -71,7 +73,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (first == null) {
             first = node;
         } else {
-            last.next = node;
+            last.setNext(node);
         }
         last = node;
     }
@@ -79,20 +81,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     private ArrayList<Task> getTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
         for (Node node : nodes.values()) {
-            tasks.add(node.value);
+            tasks.add(node.getValue());
         }
         return tasks;
-    }
-
-    private class Node {
-        public Task value;
-        public Node prev;
-        public Node next;
-
-        public Node(Task value, Node prev, Node next) {
-            this.value = value;
-            this.prev = prev;
-            this.next = next;
-        }
     }
 }
