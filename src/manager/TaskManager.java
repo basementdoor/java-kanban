@@ -32,11 +32,11 @@ public interface TaskManager {
 
     HashMap<Integer, Epic>  getEpics();
 
-    void deleteTaskById(int Id);
+    void deleteTaskById(int id);
 
-    void deleteSubtaskById(int Id);
+    void deleteSubtaskById(int id);
 
-    void deleteEpicById(int Id);
+    void deleteEpicById(int id);
 
     void deleteAllTasks();
 
