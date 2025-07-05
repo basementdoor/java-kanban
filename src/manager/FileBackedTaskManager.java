@@ -26,32 +26,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createSubtask(Subtask subtask) {
-        super.createSubtask(subtask);
-        save();
-    }
-
-    @Override
-    public void createEpic(Epic epic) {
-        super.createEpic(epic);
-        save();
-    }
-
-    @Override
     public void updateTask(Task task) {
         super.updateTask(task);
-        save();
-    }
-
-    @Override
-    public void updateSubtask(Subtask subtask) {
-        super.updateSubtask(subtask);
-        save();
-    }
-
-    @Override
-    public void updateEpic(Epic epic) {
-        super.updateEpic(epic);
         save();
     }
 
@@ -64,36 +40,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Subtask getSubtaskById(int id) {
-        var subtask = subtasks.get(id);
-        historyManager.add(subtask);
-        save();
-        return subtask;
-    }
-
-    @Override
-    public Epic getEpicById(int id) {
-        var epic = epics.get(id);
-        historyManager.add(epic);
-        save();
-        return epic;
-    }
-
-    @Override
     public void deleteTaskById(int id) {
         super.deleteTaskById(id);
-        save();
-    }
-
-    @Override
-    public void deleteSubtaskById(int id) {
-        super.deleteSubtaskById(id);
-        save();
-    }
-
-    @Override
-    public void deleteEpicById(int id) {
-        super.deleteEpicById(id);
         save();
     }
 
@@ -114,16 +62,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             for (Task task : getTasks().values()) {
                 writer.write(CSVFormatter.taskToString(task));
-                writer.newLine();
-            }
-
-            for (Subtask subtask : getSubtasks().values()) {
-                writer.write(CSVFormatter.taskToString(subtask));
-                writer.newLine();
-            }
-
-            for (Epic epic : getEpics().values()) {
-                writer.write(CSVFormatter.taskToString(epic));
                 writer.newLine();
             }
 
@@ -161,10 +99,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                             if (taskManager.getTasks().containsKey(id)) {
                                 taskManager.historyManager.add(taskManager.getTasks().get(id));
-                            } else if (taskManager.getSubtasks().containsKey(id)) {
-                                taskManager.historyManager.add(taskManager.getSubtasks().get(id));
-                            } else if (taskManager.getEpics().containsKey(id)) {
-                                taskManager.historyManager.add(taskManager.getEpics().get(id));
                             }
                         }
                     }
@@ -177,10 +111,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     }
                 }
             }
-            for (Subtask subtask : taskManager.getSubtasks().values()) {
-                int epicId = subtask.getEpicId();
-                Epic epic = taskManager.epics.get(epicId);
-                epic.addSubtask(subtask.getId());
+            for (Task task : taskManager.getTasks().values()) {
+                if (task instanceof Subtask) {
+                    Subtask subtask = (Subtask) task;
+                    Epic epic = (Epic) taskManager.tasks.get(subtask.getEpicId());
+                    epic.addSubtask(subtask.getId());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -191,12 +127,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private void addTask(Task task) {
-        if (task instanceof Subtask) {
-            Subtask subtask = (Subtask) task;
-            subtasks.put(subtask.getId(), subtask);
-        } else if (task instanceof Epic) {
-            Epic epic = (Epic) task;
-            epics.put(epic.getId(), epic);
-        } else tasks.put(task.getId(), task);
+        tasks.put(task.getId(), task);
     }
 }

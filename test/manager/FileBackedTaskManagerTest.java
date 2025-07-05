@@ -25,22 +25,20 @@ public class FileBackedTaskManagerTest {
             manager.getTaskById(task.getId());
 
             Epic epic = new Epic("Epic", "Test epic");
-            manager.createEpic(epic);
+            manager.createTask(epic);
 
             Subtask subtask = new Subtask("Subtask", "Test subtask", Status.NEW, epic.getId());
-            manager.createSubtask(subtask);
+            manager.createTask(subtask);
 
             FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
 
             // сначала проверяем количество тасок
             Assertions.assertEquals(manager.getTasks().size(), loadedManager.getTasks().size());
-            Assertions.assertEquals(manager.getSubtasks().size(), loadedManager.getSubtasks().size());
-            Assertions.assertEquals(manager.getEpics().size(), loadedManager.getEpics().size());
 
             // убеждаемся, что задачи те же самые
             Assertions.assertEquals(task, loadedManager.tasks.get(task.getId()));
-            Assertions.assertEquals(subtask, loadedManager.subtasks.get(subtask.getId()));
-            Assertions.assertEquals(epic, loadedManager.epics.get(epic.getId()));
+            Assertions.assertEquals(subtask, loadedManager.tasks.get(subtask.getId()));
+            Assertions.assertEquals(epic, loadedManager.tasks.get(epic.getId()));
 
             // проверяем историю
             Assertions.assertEquals(manager.getHistory(), loadedManager.getHistory());

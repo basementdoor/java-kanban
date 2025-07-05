@@ -21,13 +21,13 @@ public class Main {
         System.out.println(taskManager.getHistory());
 
         Epic oneTaskEpic = new Epic("First epic", "Contains one task");
-        taskManager.createEpic(oneTaskEpic);
-        taskManager.getEpicById(oneTaskEpic.getId());
+        taskManager.createTask(oneTaskEpic);
+        taskManager.getTaskById(oneTaskEpic.getId());
         System.out.println(taskManager.getHistory());
 
         Subtask subtaskFirstEpic = new Subtask("Think", "For first epic", NEW, oneTaskEpic.getId());
-        taskManager.createSubtask(subtaskFirstEpic);
-        taskManager.getSubtaskById(subtaskFirstEpic.getId());
+        taskManager.createTask(subtaskFirstEpic);
+        taskManager.getTaskById(subtaskFirstEpic.getId());
         System.out.println(taskManager.getHistory());
     }
 }

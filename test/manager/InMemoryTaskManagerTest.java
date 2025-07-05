@@ -27,12 +27,12 @@ public class InMemoryTaskManagerTest {
         Epic epic = new Epic(2, "epic", "desc");
         Subtask subtask = new Subtask(3, "subtask", "desc", Status.IN_PROGRESS, epic.getId());
         taskManager.createTask(task);
-        taskManager.createEpic(epic);
-        taskManager.createSubtask(subtask);
+        taskManager.createTask(epic);
+        taskManager.createTask(subtask);
 
         Assertions.assertEquals(task, taskManager.getTaskById(task.getId()), "Задача не была создана");
-        Assertions.assertEquals(epic, taskManager.getEpicById(epic.getId()), "Эпик не был создан");
-        Assertions.assertEquals(subtask, taskManager.getSubtaskById(subtask.getId()), "Подзадача не была создана");
+        Assertions.assertEquals(epic, taskManager.getTaskById(epic.getId()), "Эпик не был создан");
+        Assertions.assertEquals(subtask, taskManager.getTaskById(subtask.getId()), "Подзадача не была создана");
     }
 
 //  7.  проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера
@@ -74,17 +74,15 @@ public class InMemoryTaskManagerTest {
         Assertions.assertTrue(taskManager.getTasks().size() == 1);
 
         Epic epic = new Epic("First epic", "Contains one task");
-        taskManager.createEpic(epic);
-        Assertions.assertTrue(taskManager.getEpics().size() == 1);
+        taskManager.createTask(epic);
+        Assertions.assertTrue(taskManager.getTasks().size() == 2);
 
         Subtask subtask = new Subtask("Think", "For first epic", NEW, epic.getId());
-        taskManager.createSubtask(subtask);
-        Assertions.assertTrue(taskManager.getSubtasks().size() == 1);
+        taskManager.createTask(subtask);
+        Assertions.assertTrue(taskManager.getTasks().size() == 3);
 
         taskManager.deleteAllTasks();
         Assertions.assertEquals(0, taskManager.getTasks().size());
-        Assertions.assertEquals(0, taskManager.getEpics().size());
-        Assertions.assertEquals(0, taskManager.getSubtasks().size());
     }
 
     @Test
@@ -94,21 +92,21 @@ public class InMemoryTaskManagerTest {
         Assertions.assertTrue(taskManager.getTasks().containsKey(task.getId()));
 
         Epic epic = new Epic("First epic", "Contains one task");
-        taskManager.createEpic(epic);
-        Assertions.assertTrue(taskManager.getEpics().containsKey(epic.getId()));
+        taskManager.createTask(epic);
+        Assertions.assertTrue(taskManager.getTasks().containsKey(epic.getId()));
 
         Subtask subtask = new Subtask("Think", "For first epic", NEW, epic.getId());
-        taskManager.createSubtask(subtask);
-        Assertions.assertTrue(taskManager.getSubtasks().containsKey(subtask.getId()));
+        taskManager.createTask(subtask);
+        Assertions.assertTrue(taskManager.getTasks().containsKey(subtask.getId()));
 
         taskManager.deleteTaskById(task.getId());
         Assertions.assertFalse(taskManager.getTasks().containsKey(task.getId()));
 
-        taskManager.deleteSubtaskById(subtask.getId());
-        Assertions.assertFalse(taskManager.getSubtasks().containsKey(subtask.getId()));
+        taskManager.deleteTaskById(subtask.getId());
+        Assertions.assertFalse(taskManager.getTasks().containsKey(subtask.getId()));
 
-        taskManager.deleteEpicById(epic.getId());
-        Assertions.assertFalse(taskManager.getEpics().containsKey(epic.getId()));
+        taskManager.deleteTaskById(epic.getId());
+        Assertions.assertFalse(taskManager.getTasks().containsKey(epic.getId()));
     }
 
     @Test
@@ -127,14 +125,14 @@ public class InMemoryTaskManagerTest {
     @Test
     public void updateSubtaskTest() {
         Epic epic = new Epic("First epic", "Contains one task");
-        taskManager.createEpic(epic);
+        taskManager.createTask(epic);
         Subtask subtask = new Subtask("Think", "For first epic", NEW, epic.getId());
-        taskManager.createSubtask(subtask);
+        taskManager.createTask(subtask);
 
-        taskManager.updateSubtask(new Subtask(subtask.getId(), "New name", "New desc", IN_PROGRESS,
+        taskManager.updateTask(new Subtask(subtask.getId(), "New name", "New desc", IN_PROGRESS,
                 epic.getId()));
 
-        var updatedSubtask = taskManager.getSubtaskById(subtask.getId());
+        var updatedSubtask = taskManager.getTaskById(subtask.getId());
         Assertions.assertEquals("New name", updatedSubtask.getName());
         Assertions.assertEquals("New desc", updatedSubtask.getDescription());
         Assertions.assertEquals(IN_PROGRESS, updatedSubtask.getTaskStatus());
@@ -143,11 +141,11 @@ public class InMemoryTaskManagerTest {
     @Test
     public void updateEpicTest() {
         Epic epic = new Epic("First epic", "Contains one task");
-        taskManager.createEpic(epic);
+        taskManager.createTask(epic);
 
-        taskManager.updateEpic(new Epic(epic.getId(), "New name", "New desc"));
+        taskManager.updateTask(new Epic(epic.getId(), "New name", "New desc"));
 
-        var updatedEpic = taskManager.getEpicById(epic.getId());
+        var updatedEpic = taskManager.getTaskById(epic.getId());
         Assertions.assertEquals("New name", updatedEpic.getName());
         Assertions.assertEquals("New desc", updatedEpic.getDescription());
     }
@@ -155,14 +153,14 @@ public class InMemoryTaskManagerTest {
     @Test
     public void updateEpicStatusTest() {
         Epic epic = new Epic("First epic", "Contains one task");
-        taskManager.createEpic(epic);
+        taskManager.createTask(epic);
 
         Subtask newTask = new Subtask("newTask", "For first epic", NEW, epic.getId());
-        taskManager.createSubtask(newTask);
+        taskManager.createTask(newTask);
         Assertions.assertEquals(NEW, epic.getTaskStatus());
 
         Subtask inProgressTask = new Subtask("inProgressTask", "For first epic", IN_PROGRESS, epic.getId());
-        taskManager.createSubtask(inProgressTask);
+        taskManager.createTask(inProgressTask);
 
         Assertions.assertEquals(IN_PROGRESS, epic.getTaskStatus());
     }
