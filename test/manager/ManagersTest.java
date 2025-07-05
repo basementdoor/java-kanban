@@ -8,7 +8,7 @@ public class ManagersTest {
 //  5. убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров
     @Test
     public void managersInitTest() {
-        Assertions.assertEquals(InMemoryTaskManager.class, Managers.getDefault().getClass(),
+        Assertions.assertEquals(FileBackedTaskManager.class, Managers.getDefault().getClass(),
                 "Некорректная инициализация");
         Assertions.assertEquals(InMemoryHistoryManager.class, Managers.getDefaultHistory().getClass(),
                 "Некорректная инициализация");

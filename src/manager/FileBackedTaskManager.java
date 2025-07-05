@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -23,71 +22,89 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void createTask(Task task) {
         super.createTask(task);
+        save();
     }
 
     @Override
     public void createSubtask(Subtask subtask) {
         super.createSubtask(subtask);
+        save();
     }
 
     @Override
     public void createEpic(Epic epic) {
         super.createEpic(epic);
+        save();
     }
 
     @Override
     public void updateTask(Task task) {
         super.updateTask(task);
+        save();
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
+        save();
     }
 
     @Override
     public void updateEpic(Epic epic) {
         super.updateEpic(epic);
+        save();
     }
 
     @Override
     public Task getTaskById(int id) {
-        return super.getTaskById(id);
+        var task = tasks.get(id);
+        historyManager.add(task);
+        save();
+        return task;
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
-        return super.getSubtaskById(id);
+        var subtask = subtasks.get(id);
+        historyManager.add(subtask);
+        save();
+        return subtask;
     }
 
     @Override
     public Epic getEpicById(int id) {
-        return super.getEpicById(id);
+        var epic = epics.get(id);
+        historyManager.add(epic);
+        save();
+        return epic;
     }
 
     @Override
     public void deleteTaskById(int id) {
         super.deleteTaskById(id);
+        save();
     }
 
     @Override
     public void deleteSubtaskById(int id) {
         super.deleteSubtaskById(id);
+        save();
     }
 
     @Override
     public void deleteEpicById(int id) {
         super.deleteEpicById(id);
+        save();
     }
 
     @Override
     public void deleteAllTasks() {
         super.deleteAllTasks();
+        save();
     }
 
-    @Override
-    public ArrayList<Task> getHistory() {
-        return super.getHistory();
+    public File getFile() {
+        return file;
     }
 
     private void save() {
@@ -120,14 +137,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    private static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager taskManager = new FileBackedTaskManager(file);
 
         try {
             var fileData = Files.readString(file.toPath());
             String[] fileDataSplit = fileData.split(System.lineSeparator());
-            for (int i = 0; i < fileDataSplit.length; i++) {
+            for (int i = 1; i < fileDataSplit.length - 1; i++) {
                 String line = fileDataSplit[i];
+                /*
+                Далее if сделан, чтобы понимать, когда заканчиваются таски, и начинается менеджер истории.
+                Логика: когда встречается пустая строка (ее добавляли при сохранении после всех тасок) - пропускаем
+                пустую, и из следующей восстанавливаем историю (поэтому i < fileDataSplit.length - 1 т.к. для последней
+                строки логика обработки задана в этом if). Если истории нет - этот if наступать не должен (нет пустых
+                строк)
+                */
                 if (line.isBlank()) {
                     if (i + 1 < fileDataSplit.length) {
                         line = fileDataSplit[i + 1];
@@ -162,7 +186,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             e.printStackTrace();
             throw new ManagerReadException("Не удалось прочитать файл: " + file);
         }
-
 
         return taskManager;
     }
