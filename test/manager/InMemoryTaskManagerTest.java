@@ -23,11 +23,11 @@ public class InMemoryTaskManagerTest {
 //  6.  проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id
     @Test
     public void createDifferentTasksAndFindItByIdTest() {
-        Task task = new Task(1, "task", "desc", Status.NEW);
-        Epic epic = new Epic(2, "epic", "desc");
-        Subtask subtask = new Subtask(3, "subtask", "desc", Status.IN_PROGRESS, epic.getId());
+        Task task = new Task("task", "desc", Status.NEW);
         taskManager.createTask(task);
+        Epic epic = new Epic("epic", "desc");
         taskManager.createTask(epic);
+        Subtask subtask = new Subtask("subtask", "desc", Status.IN_PROGRESS, epic.getId());
         taskManager.createTask(subtask);
 
         Assertions.assertEquals(task, taskManager.getTaskById(task.getId()), "Задача не была создана");
