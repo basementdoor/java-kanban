@@ -1,9 +1,13 @@
 package manager;
 
+import java.io.File;
+
 public class Managers {
 
     public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+        File file = new File("resources/data.csv");
+        file.getParentFile().mkdirs();
+        return new FileBackedTaskManager(file);
     }
 
     public static HistoryManager getDefaultHistory() {

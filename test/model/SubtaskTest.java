@@ -22,7 +22,7 @@ public class SubtaskTest {
     @Test
     public void subtaskShouldNotBeAddAsEpicToItselfTest() throws Exception {
         TaskManager taskManager = Managers.getDefault();
-        taskManager.createSubtask(new Subtask(id,"task", "desc", Status.NEW, id));
-        Assertions.assertTrue(taskManager.getSubtasks().size() == 0, "Подзадача была создана");
+        taskManager.createTask(new Subtask(id,"task", "desc", Status.NEW, id));
+        Assertions.assertTrue(taskManager.getTasks().size() == 0, "Подзадача была создана");
     }
 }
