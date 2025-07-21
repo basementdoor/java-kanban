@@ -1,5 +1,7 @@
 package manager;
 
+import exception.ManagerReadException;
+import exception.ManagerSaveException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -9,8 +11,16 @@ import util.Status;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
+
+    @Override
+    protected FileBackedTaskManager createTaskManager() {
+        return (FileBackedTaskManager) Managers.getDefault();
+    }
 
     @Test
     public void saveAndLoadManagerFromFileTest() {
@@ -20,14 +30,16 @@ public class FileBackedTaskManagerTest {
 
             TaskManager manager = new FileBackedTaskManager(tempFile);
 
-            Task task = new Task("Task", "Test task", Status.IN_PROGRESS);
+            Task task = new Task("Task", "Test task", Status.IN_PROGRESS, LocalDateTime.now(),
+                    Duration.of(9, ChronoUnit.HOURS));
             manager.createTask(task);
             manager.getTaskById(task.getId());
 
             Epic epic = new Epic("Epic", "Test epic");
             manager.createTask(epic);
 
-            Subtask subtask = new Subtask("Subtask", "Test subtask", Status.NEW, epic.getId());
+            Subtask subtask = new Subtask("Subtask", "Test subtask", Status.NEW, epic.getId(),
+                    LocalDateTime.of(2024, 7, 15, 18, 30), Duration.of(700, ChronoUnit.SECONDS));
             manager.createTask(subtask);
 
             FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
@@ -50,6 +62,12 @@ public class FileBackedTaskManagerTest {
                 tempFile.delete();
             }
         }
+    }
+
+    @Test
+    void loadFromNotExistFileExceptionTest() {
+        File errorFile = new File("errorFile.csv");
+        Assertions.assertThrows(ManagerReadException.class, () -> FileBackedTaskManager.loadFromFile(errorFile));
     }
 
 }

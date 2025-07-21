@@ -59,11 +59,12 @@ public class InMemoryHistoryManager implements HistoryManager {
     private void linkLast(Task task) {
         Task taskCopy;
         if (task instanceof Task) {
-            taskCopy = new Task(task.getId(), task.getName(), task.getDescription(), task.getTaskStatus());
+            taskCopy = new Task(task.getId(), task.getName(), task.getDescription(), task.getTaskStatus(),
+                    task.getStartTime(), task.getDuration());
         } else if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;
             taskCopy = new Subtask(subtask.getId(), subtask.getName(), subtask.getDescription(),
-                    subtask.getTaskStatus(), subtask.getEpicId());
+                    subtask.getTaskStatus(), subtask.getEpicId(), subtask.getStartTime(), subtask.getDuration());
         } else {
             Epic epic = (Epic) task;
             taskCopy = new Epic(epic.getId(), epic.getName(), epic.getDescription());
