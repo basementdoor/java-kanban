@@ -1,4 +1,4 @@
-package manager;
+package exception;
 
 public class ManagerReadException extends  RuntimeException {
 
