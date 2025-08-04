@@ -35,6 +35,11 @@ public class HttpTaskServer {
         server.start();
     }
 
+    public void stop() {
+        server.stop(0);
+        System.out.println("Сервер остановлен.");
+    }
+
     public static void main(String[] args) throws IOException {
 
         HttpTaskServer taskServer = new HttpTaskServer(Managers.getDefault());
