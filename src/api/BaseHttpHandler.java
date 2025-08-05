@@ -10,6 +10,8 @@ import manager.TaskManager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
+import util.DurationAdapter;
+import util.LocalDateTimeAdapter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,18 +91,20 @@ public abstract class BaseHttpHandler implements HttpHandler {
                 List<Task> epics = manager.getTasks().values().stream()
                         .filter(task -> task instanceof Epic)
                         .toList();
-                String response = gson.toJson(epics);
-                sendSuccess(exchange, response);
+                if (epics.isEmpty()) sendNotFound(exchange, "Список эпиков пуст");
+                else sendSuccess(exchange, gson.toJson(epics));
             } case "subtasks" -> {
                 List<Task> subtasks = manager.getTasks().values().stream()
                         .filter(task -> task instanceof Subtask)
                         .toList();
-                sendSuccess(exchange, gson.toJson(subtasks));
+                if (subtasks.isEmpty()) sendNotFound(exchange, "Список подзадач пуст");
+                else sendSuccess(exchange, gson.toJson(subtasks));
             } case "tasks" -> {
                 List<Task> tasks = manager.getTasks().values().stream()
                         .filter(task -> !(task instanceof Epic) && !(task instanceof Subtask))
                         .toList();
-                sendSuccess(exchange, gson.toJson(tasks));
+                if (tasks.isEmpty()) sendNotFound(exchange, "Список задач пуст");
+                else sendSuccess(exchange, gson.toJson(tasks));
             } default -> sendNotFound(exchange, WRONG_ENDPOINT);
 
         }
@@ -192,9 +196,9 @@ public abstract class BaseHttpHandler implements HttpHandler {
             }
         }
 
-        if (pathParts.length == 3 && pathParts[1].equals("epics") ||
+        if (pathParts.length == 3 && (pathParts[1].equals("epics") ||
                 pathParts[1].equals("subtasks") ||
-                pathParts[1].equals("tasks")) {
+                pathParts[1].equals("tasks"))) {
             if (requestMethod.equals("GET")) {
                 return Endpoint.GET_TASK_BY_ID;
             } else if (requestMethod.equals("DELETE")) {

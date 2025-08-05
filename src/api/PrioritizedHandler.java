@@ -16,8 +16,11 @@ public class PrioritizedHandler extends BaseHttpHandler {
 
         String[] pathParts = exchange.getRequestURI().getPath().split("/");
         if (exchange.getRequestMethod().equals("GET") && pathParts.length == 2) {
-            String response = gson.toJson(manager.getPrioritizedTasks());
-            sendSuccess(exchange, response);
+            var prioritizedTasks = manager.getPrioritizedTasks();
+
+            if (prioritizedTasks.isEmpty()) sendNotFound(exchange, "Список задач пуст");
+            else sendSuccess(exchange, gson.toJson(prioritizedTasks));
+
         } else {
             sendNotFound(exchange, WRONG_ENDPOINT);
         }

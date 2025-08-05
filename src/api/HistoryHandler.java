@@ -16,8 +16,11 @@ public class HistoryHandler extends BaseHttpHandler {
 
         String[] pathParts = exchange.getRequestURI().getPath().split("/");
         if (exchange.getRequestMethod().equals("GET") && pathParts.length == 2) {
-            String response = gson.toJson(manager.getHistory());
-            sendSuccess(exchange, response);
+            var history = manager.getHistory();
+
+            if (history.isEmpty()) sendNotFound(exchange, "История пуста");
+            else sendSuccess(exchange, gson.toJson(history));
+
         } else {
             sendNotFound(exchange, WRONG_ENDPOINT);
         }

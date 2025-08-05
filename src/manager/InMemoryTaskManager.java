@@ -12,7 +12,7 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    protected static int uniqueId = 1;
+    protected int uniqueId = 1;
     protected final HashMap<Integer, Task> tasks = new HashMap<>();
     protected final HistoryManager historyManager = Managers.getDefaultHistory();
     protected TreeSet<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime,
@@ -155,7 +155,11 @@ public class InMemoryTaskManager implements TaskManager {
         var epic = (Epic) tasks.get(id);
         epic.getSubtasksId().forEach(subtaskId -> {
             tasks.remove(subtaskId);
-            prioritizedTasks.remove(subtaskId);
+            try {
+                prioritizedTasks.remove(subtaskId);
+            } catch (Exception e) {
+                e.getMessage();
+            }
         });
         tasks.remove(id);
         prioritizedTasks.remove(epic);

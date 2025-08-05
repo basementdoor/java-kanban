@@ -40,25 +40,26 @@ public class HttpTaskServer {
         System.out.println("Сервер остановлен.");
     }
 
+    public void createBasicTasks() {
+        Task task = new Task("First task", "Reaaallyy important task", NEW, LocalDateTime.now(),
+                Duration.of(3, ChronoUnit.DAYS));
+        manager.createTask(task);
+        manager.getTaskById(task.getId());
+
+        Epic epic = new Epic("First epic", "Contains one task");
+        manager.createTask(epic);
+        manager.getTaskById(epic.getId());
+
+        Subtask subtask = new Subtask("Think", "For first epic", NEW, epic.getId(),
+                LocalDateTime.of(2025, 7, 15, 18, 30), Duration.of(90, ChronoUnit.MINUTES));
+        manager.createTask(subtask);
+        manager.getTaskById(subtask.getId());
+    }
+
     public static void main(String[] args) throws IOException {
 
-        HttpTaskServer taskServer = new HttpTaskServer(Managers.getDefault());
+        HttpTaskServer taskServer = new HttpTaskServer(Managers.getInMemory());
         taskServer.start();
-
-        Task simpleTask = new Task("First task", "Reaaallyy important task", NEW, LocalDateTime.now(),
-                Duration.of(3, ChronoUnit.DAYS));
-        taskServer.manager.createTask(simpleTask);
-        taskServer.manager.getTaskById(simpleTask.getId());
-        System.out.println(taskServer.manager.getHistory());
-
-        Epic oneTaskEpic = new Epic("First epic", "Contains one task");
-        taskServer.manager.createTask(oneTaskEpic);
-        taskServer.manager.getTaskById(oneTaskEpic.getId());
-        System.out.println(taskServer.manager.getHistory());
-
-        Subtask subtaskFirstEpic = new Subtask("Think", "For first epic", NEW, oneTaskEpic.getId(),
-                LocalDateTime.of(2025, 7, 15, 18, 30), Duration.of(90, ChronoUnit.MINUTES));
-        taskServer.manager.createTask(subtaskFirstEpic);
-        taskServer.manager.getTaskById(subtaskFirstEpic.getId());
+        taskServer.createBasicTasks();
     }
 }

@@ -1,4 +1,4 @@
-package api;
+package util;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -13,7 +13,11 @@ public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
 
     @Override
     public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
-        jsonWriter.value(localDateTime.format(formatter));
+        if (localDateTime == null) {
+            jsonWriter.nullValue();
+        } else {
+            jsonWriter.value(localDateTime.format(formatter));
+        }
     }
 
     @Override
