@@ -109,7 +109,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     taskManager.addTask(task);
 
                     if (task.getId() > taskManager.uniqueId) {
-                        uniqueId = task.getId() + 1;
+                        taskManager.uniqueId = task.getId() + 1;
                     }
                 }
             }

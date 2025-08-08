@@ -13,7 +13,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeSet;
 
 import static util.Status.IN_PROGRESS;
@@ -256,7 +255,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(3, prioritizedTasks.size()),
                 () -> Assertions.assertEquals(firstTask, prioritizedTasks.first()),
-                () -> Assertions.assertEquals(lastTask, prioritizedTasks.getLast())
+                () -> Assertions.assertEquals(lastTask, prioritizedTasks.last())
         );
     }
 
