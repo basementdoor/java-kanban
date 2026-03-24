@@ -1,6 +1,6 @@
 package kanban.util;
 
-import model.Task;
+import kanban.model.Task;
 
 public class Node {
     private Task value;

@@ -1,6 +1,6 @@
 package kanban.model;
 
-import util.Status;
+import kanban.util.Status;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

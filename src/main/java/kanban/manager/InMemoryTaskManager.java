@@ -1,10 +1,10 @@
 package kanban.manager;
 
-import exception.TaskIntersectionException;
+import kanban.exception.TaskIntersectionException;
 import kanban.model.Epic;
 import kanban.model.Subtask;
 import kanban.model.Task;
-import util.Status;
+import kanban.util.Status;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

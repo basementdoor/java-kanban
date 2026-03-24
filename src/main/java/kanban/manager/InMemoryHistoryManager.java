@@ -3,7 +3,7 @@ package kanban.manager;
 import kanban.model.Epic;
 import kanban.model.Subtask;
 import kanban.model.Task;
-import util.Node;
+import kanban.util.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;

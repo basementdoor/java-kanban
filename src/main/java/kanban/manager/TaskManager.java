@@ -1,6 +1,6 @@
 package kanban.manager;
 
-import model.Task;
+import kanban.model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
