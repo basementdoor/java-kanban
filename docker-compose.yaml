@@ -1,0 +1,30 @@
+services:
+  server:
+    build: .
+    image: kanban
+    container_name: kanban-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/kanban
+      - SPRING_DATASOURCE_USERNAME=kanban
+      - SPRING_DATASOURCE_PASSWORD=kanban
+      - TZ=Europe/Moscow
+
+  db:
+    image: postgres:16.1
+    container_name: postgres
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_PASSWORD=kanban
+      - POSTGRES_USER=kanban
+      - POSTGRES_DB=kanban
+      - TZ=Europe/Moscow
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Task {
 
-    int id;
+    long id;
     String name;
     String description;
 
