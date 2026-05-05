@@ -1,16 +1,21 @@
 package kanban.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Subtask extends Task {
+@Entity
+@Table(name = "subtasks")
+public class Subtask extends AbstractTask {
 
-    int epicId;
+    Long epicId;
 }

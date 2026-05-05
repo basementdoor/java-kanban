@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     description VARCHAR(2000),
     status VARCHAR(50),
     start_time TIMESTAMP,
-    duration BIGINT
+    end_time TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS epics (

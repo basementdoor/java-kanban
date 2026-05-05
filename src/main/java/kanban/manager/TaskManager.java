@@ -7,17 +7,17 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 public interface TaskManager {
-    void createTask(Task task);
+//    void createTask(Task task);
 
-    void updateTask(Task task);
+//    void updateTask(Task task);
 
-    Task getTaskById(int id);
+//    Task getTaskById(int id);
 
-    HashMap<Integer, Task> getTasks();
+//    HashMap<Integer, Task> getTasks();
 
-    void deleteTaskById(int id);
+//    void deleteTaskById(int id);
 
-    void deleteAllTasks();
+//    void deleteAllTasks();
 
     ArrayList<Task> getHistory();
 
